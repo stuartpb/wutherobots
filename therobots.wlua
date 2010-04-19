@@ -2,18 +2,14 @@ require "iuplua"
 require "iupluagl"
 require "luagl"
 
-function roboerror(msg)
-  iup.Message("ROBO ERROR",msg)
-  iup.ExitLoop()
-end
-
 maxdistance=100
 
 canvas = iup.glcanvas{buffer="DOUBLE", rastersize="640x480", border="NO"}
 
 dialog = iup.dialog{canvas; title="WE ARE TEH R0B0TS"}
 
-local function roboerror(msg)
+function roboerror(msg)
+  loop.run="NO"
   iup.Message("ROBO ERROR",msg)
   iup.ExitLoop()
 end

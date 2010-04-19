@@ -24,6 +24,13 @@ robot.instructions={
   end,
 }
 
+function robot:error(...)
+    roboerror(string.format(
+      "%i (%s): %s",
+      self.counter, proc[self.counter],
+      string.format(...)))
+end
+
 function robot:interpret()
   local command=select(3,
     string.find(
@@ -38,23 +45,25 @@ function robot:interpret()
       string.find(
         proc[self.counter],
         " (%d+)"))
-    if addr and tonumber(addr) then
-      robot.instructions[command](self,tonumber(addr))
+    if addr then
+      if tonumber(addr) then
+        robot.instructions[command](self,tonumber(addr))
+      else
+        self:error('"%s" is not a valid address.',command)
+      end
     else
-      roboerror "Jump functions must include an address."
+      self:error "Jump functions must include an address."
     end
   else
-    roboerror(string.format(
-      "%i: Invalid command %q.",
-      self.counter,command))
+      self:error('Invalid command "%s".',command)
   end
 end
 
 function robot:step()
-  self.jumpedto=nil
-  self.counter=self.counter+1
+  self.jumpedto = nil
+  self.counter = self.counter+1
   if self.counter > #proc then
-    roboerror (
+    self:error (
       "End of instructions reached. You need to end with a GOTO.")
   else
     self:interpret()
@@ -63,13 +72,17 @@ end
 
 function robot:jump(addr)
   if addr > #proc then
-    roboerror "Attempt to jump past the end of the list."
+    self:error(
+      "Attempt to jump past the end of the list."..
+      " (%i commands, jump was to %i)", #proc,addr)
   elseif addr < 1 then
-    roboerror "Attempt to jump past the beginning of the list."
+    self:error(
+      "Attempt to jump past the beginning of the list."..
+      " (commands start at 1, %i is less than 1)",addr)
   elseif addr == self.counter then
-    roboerror "Attempt to jump to same address as command to jump."
+    self:error "Attempt to jump to same address as command to jump."
   elseif self.jumpedto and self.jumpedto[addr] then
-    roboerror(string.format("Infinite jump loop at %s.",addr))
+    self:error ("Jumping to %s enters an infinite jump loop.",addr)
   else
     self.counter=addr
     self.jumpedto=self.jumpedto or {}
@@ -84,7 +97,8 @@ function robot.new(position)
     x=position,
     interpret=robot.interpret,
     step=robot.step,
-    jump=robot.jump
+    jump=robot.jump,
+    error=robot.error
   }
 end
 
