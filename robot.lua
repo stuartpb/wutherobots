@@ -1,4 +1,4 @@
-proc=require "robotproc"
+proc=dofile "robotproc.lua"
 sensor={x=0}
 
 robot={}
@@ -11,7 +11,7 @@ robot.instructions={
     robot.x=robot.x+1
   end,
 
-  IFSENSORGOTO=function(robot,addr)
+  TRYTO=function(robot,addr)
     if robot.x==sensor.x then
       robot:jump(addr)
     else
@@ -33,7 +33,7 @@ function robot:interpret()
     --do nothing
   elseif command=="LEFT" or command=="RIGHT" then
     robot.instructions[command](self)
-  elseif command=="GOTO" or command=="IFSENSORGOTO" then
+  elseif command=="GOTO" or command=="TRYTO" then
     local addr=select(3,
       string.find(
         proc[self.counter],

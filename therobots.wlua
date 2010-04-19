@@ -21,14 +21,17 @@ end
 require "robot"
 
 math.randomseed(os.time())
+
+--introduce entropy
+math.random() math.random()
+
 servo= robot.new(-math.random(maxdistance))
 crow= robot.new(math.random(maxdistance))
 
-iup.timer{time="250",
+loop=iup.timer{time="50",
   action_cb=function(self)
     crow:step()
     servo:step()
-    recalculate()
     canvas:action()
     dialog.title=string.format(
       "Bot 1 X: %i Bot 2 X: %i",
@@ -37,12 +40,13 @@ iup.timer{time="250",
       return iup.CLOSE
     end
   end,
-  run="YES"
+  run="NO"
 }
 
 require "drawbots"
 
 dialog:show()
 
+loop.run="YES"
 
 iup.MainLoop()

@@ -1,9 +1,8 @@
-return --put robot functions in this table
-{
-  "WAIT",
-  "RIGHT",
-  "IFSENSORGOTO 5",
-  "GOTO 1",
-  "RIGHT",
-  "GOTO 5"
-}
+robotproc={}
+
+for line in io.lines "proc.txt" do
+  --only include non-blank lines
+  if line ~= "" then robotproc[#robotproc+1]=line end
+end
+
+return robotproc

@@ -2,29 +2,35 @@ local minwidth=15
 local margin=2
 local aspectratio=1 --initialized in case resize_cb isn't called first
 
-function recalculate()
+function drawbots()
   local gap=math.abs(servo.x-crow.x)
   local left=math.min(servo.x,crow.x)
 
-  if gap<minwidth then
-    left=left-(gap-minwidth)/2
+  if gap < minwidth then
+    left=left-(minwidth-gap)/2
     gap=minwidth
   end
 
+  local cleft=left-margin
+  local cright=left+gap+margin
+
   local halfheight=(aspectratio*(gap+margin*2))/2
 
-  gl.Ortho(
-    left-margin,
-    left+gap+margin,
+  gl.MatrixMode "PROJECTION"
+  gl.LoadIdentity()
+  gl.Ortho(cleft,cright,
     halfheight,-halfheight,
     -1,1)
-end
 
-function drawbots()
-  gl.ClearColor(.5,.5,.2,1)
+  gl.ClearColor(.5,.5,.9,1)
+  gl.Clear "COLOR_BUFFER_BIT,DEPTH_BUFFER_BIT"
 
-  gl.Color(0,1,0)
-  gl.Rect(-100,0,100,.125)
+  gl.Color(0,.9,0)
+  gl.Rect(cleft,0,cright,halfheight)
+
+  --sensor light
+  gl.Color(.625,.625,.925)
+  gl.Rect(sensor.x+.2,-halfheight,sensor.x+.8,0)
 
   --sensor
   gl.Color(1,1,1)
@@ -57,8 +63,7 @@ function canvas:resize_cb(width, height)
 
   aspectratio = height/width
 
-  recalculate()
-  drawbots()
+  self:action()
 end
 
 function canvas:action()

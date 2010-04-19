@@ -6,7 +6,7 @@ end
 
 require "robot"
 
-math.randomseed(os.time())
+math.randomseed(os.time()) math.random() math.random()
 badrobot= robot.new(math.random(maxdistance))
 redrobot= robot.new(-math.random(maxdistance))
 
