@@ -6,7 +6,7 @@ maxdistance=100
 
 canvas = iup.glcanvas{buffer="DOUBLE", rastersize="640x480", border="NO"}
 
-dialog = iup.dialog{canvas; title="WE ARE TEH R0B0TS"}
+dialog = iup.dialog{canvas; shrink="YES"}
 
 function roboerror(msg)
   loop.run="NO"

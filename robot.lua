@@ -49,13 +49,13 @@ function robot:interpret()
       if tonumber(addr) then
         robot.instructions[command](self,tonumber(addr))
       else
-        self:error('"%s" is not a valid address.',command)
+        self:error('"%s" is not a valid address.',addr)
       end
     else
       self:error "Jump functions must include an address."
     end
   else
-      self:error('Invalid command "%s".',command)
+    self:error('Invalid command "%s".',command)
   end
 end
 

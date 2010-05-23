@@ -43,6 +43,27 @@ function drawbots()
   --servo
   gl.Color(.8,0,0)
   gl.Rect(servo.x,-2,servo.x+1,0)
+
+  --red flowers
+  for x=cleft-cleft%9, cright,9 do
+    local y=2+(x%18/9)*2
+    gl.Color(1,0,.3)
+    gl.Rect(x,y,x+1,y+1)
+
+    gl.Color(1,.8,0)
+    gl.Rect(x+1/3,y+1/3,x+2/3,y+2/3)
+  end
+
+  --blue flowers
+  for x=cleft-cleft%16, cright,16 do
+    local y=1+(x%48/16)*2
+    gl.Color(0,.3,1)
+    gl.Rect(x,y,x+1,y+1)
+
+    gl.Color(1,.8,0)
+    gl.Rect(x+1/3,y+1/3,x+2/3,y+2/3)
+  end
+
 end
 
 function canvas:resize_cb(width, height)
