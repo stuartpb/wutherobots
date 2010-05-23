@@ -21,18 +21,18 @@ math.randomseed(os.time())
 --introduce entropy
 math.random() math.random()
 
-servo= robot.new(-math.random(maxdistance))
-crow= robot.new(math.random(maxdistance))
+heathcliff= robot.new(-math.random(maxdistance))
+catherine= robot.new(math.random(maxdistance))
 
 loop=iup.timer{time="50",
   action_cb=function(self)
-    crow:step()
-    servo:step()
+    catherine:step()
+    heathcliff:step()
     canvas:action()
     dialog.title=string.format(
-      "Bot 1 X: %i Bot 2 X: %i",
-      crow.x,servo.x)
-    if (crow.x==servo.x) then
+      "Catherine: %i Heathcliff: %i",
+      catherine.x,heathcliff.x)
+    if (catherine.x==heathcliff.x) then
       return iup.CLOSE
     end
   end,

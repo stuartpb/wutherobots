@@ -3,8 +3,8 @@ local margin=2
 local aspectratio=1 --initialized in case resize_cb isn't called first
 
 function drawbots()
-  local gap=math.abs(servo.x-crow.x)
-  local left=math.min(servo.x,crow.x)
+  local gap=math.abs(heathcliff.x-catherine.x)
+  local left=math.min(heathcliff.x,catherine.x)
 
   if gap < minwidth then
     left=left-(minwidth-gap)/2
@@ -36,13 +36,13 @@ function drawbots()
   gl.Color(1,1,1)
   gl.Rect(sensor.x,-.125,sensor.x+1,0)
 
-  --crow
+  --catherine
   gl.Color(1,.8,0)
-  gl.Rect(crow.x,-2,crow.x+1,0)
+  gl.Rect(catherine.x,-2,catherine.x+1,0)
 
-  --servo
+  --heathcliff
   gl.Color(.8,0,0)
-  gl.Rect(servo.x,-2,servo.x+1,0)
+  gl.Rect(heathcliff.x,-2,heathcliff.x+1,0)
 
   --red flowers
   for x=cleft-cleft%9, cright,9 do
