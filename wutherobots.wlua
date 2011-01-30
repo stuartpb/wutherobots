@@ -1,28 +1,35 @@
-require "iuplua"
-require "iupluagl"
-require "luagl"
+local iup = require "iuplua"
+            require "iupluagl"
 
-maxdistance=100
+local robot = require "robot"
+local gldriver = require "gldriver"
 
-canvas = iup.glcanvas{buffer="DOUBLE", rastersize="640x480", border="NO"}
+local maxdistance=100
 
-dialog = iup.dialog{canvas; shrink="YES"}
+local canvas = iup.glcanvas{buffer="DOUBLE", rastersize="640x480", border="NO"}
+local dialog = iup.dialog{canvas; shrink="YES"}
 
-function roboerror(msg)
+robot.register_error_handler(function (msg)
   loop.run="NO"
   iup.Message("ROBO ERROR",msg)
   iup.ExitLoop()
-end
-
-require "robot"
+end)
 
 math.randomseed(os.time())
 
 --introduce entropy
 math.random() math.random()
 
-heathcliff= robot.new(-math.random(maxdistance))
-catherine= robot.new(math.random(maxdistance))
+local heathcliff= robot.new(-math.random(maxdistance))
+local catherine= robot.new(math.random(maxdistance))
+
+gldriver.register_resize_cb(canvas,heathcliff,catherine)
+
+function canvas:action()
+  iup.GLMakeCurrent(self)
+  gldriver.drawbots(heathcliff,catherine)
+  iup.GLSwapBuffers(self)
+end
 
 loop=iup.timer{time="50",
   action_cb=function(self)
@@ -38,8 +45,6 @@ loop=iup.timer{time="50",
   end,
   run="NO"
 }
-
-require "drawbots"
 
 dialog:show()
 

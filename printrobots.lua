@@ -1,10 +1,8 @@
-maxdistance=100
+local maxdistance=100
 
-function roboerror(msg)
-  error(msg)
-end
+robot.register_error_handler(error)
 
-require "robot"
+local robot = require "robot"
 
 math.randomseed(os.time()) math.random() math.random()
 badrobot= robot.new(math.random(maxdistance))

@@ -1,7 +1,15 @@
-proc=dofile "robotproc.lua"
-sensor={x=0}
+local proc=dofile "robotproc.lua"
 
-robot={}
+local robot={sensor={x=0}}
+local sensor=robot.sensor
+
+local roboerror
+--module functions
+function robot.register_error_handler(handler)
+  roboerror = handler
+end
+
+--robot functions
 robot.instructions={
   LEFT=function(robot)
     robot.x=robot.x-1
@@ -11,7 +19,7 @@ robot.instructions={
     robot.x=robot.x+1
   end,
 
-  TRYTO=function(robot,addr)
+  SWITCH=function(robot,addr)
     if robot.x==sensor.x then
       robot:jump(addr)
     else
@@ -25,10 +33,10 @@ robot.instructions={
 }
 
 function robot:error(...)
-    roboerror(string.format(
-      "%i (%s): %s",
-      self.counter, proc[self.counter],
-      string.format(...)))
+  roboerror(string.format(
+    "%i (%s): %s",
+    self.counter, proc[self.counter],
+    string.format(...)))
 end
 
 function robot:interpret()
@@ -40,7 +48,7 @@ function robot:interpret()
     --do nothing
   elseif command=="LEFT" or command=="RIGHT" then
     robot.instructions[command](self)
-  elseif command=="GOTO" or command=="TRYTO" then
+  elseif command=="GOTO" or command=="SWITCH" then
     local addr=select(3,
       string.find(
         proc[self.counter],
